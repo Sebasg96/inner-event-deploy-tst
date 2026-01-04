@@ -22,7 +22,7 @@ export async function updateInitiativeStatus(initiativeId: string, status: Kanba
     // If status is DONE, force 100.
     // If moving out of DONE, should we reset? Yes.
 
-    const updateData: any = { status };
+    const updateData: { status: KanbanStatus; progress?: number } = { status };
     if (status === 'DONE') {
         updateData.progress = 100;
     } else if (status === 'TODO') {

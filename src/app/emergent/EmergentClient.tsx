@@ -14,7 +14,26 @@ import { createHardChoice, createStrategicConversation } from '@/app/actions';
   5. Detector de Mutaciones
 */
 
-export default function EmergentClient({ hardChoices, strategicConversations }) {
+interface HardChoice {
+    id: string;
+    description: string;
+    reasoning: string;
+    date: string | Date; // Prisma returns Date, serialized might be string
+}
+
+interface StrategicConversation {
+    id: string;
+    topic: string;
+    conclusion: string | null;
+    date: string | Date;
+}
+
+interface EmergentClientProps {
+    hardChoices: HardChoice[];
+    strategicConversations: StrategicConversation[];
+}
+
+export default function EmergentClient({ hardChoices, strategicConversations }: EmergentClientProps) {
     const [activeTab, setActiveTab] = useState('hardChoices');
     const accentColor = 'hsl(340 100% 60%)'; // Crimson for Emergent
 
@@ -40,7 +59,7 @@ export default function EmergentClient({ hardChoices, strategicConversations }) 
             </form>
 
             <div style={{ display: 'grid', gap: '1rem' }}>
-                {hardChoices.map((hc: any) => (
+                {hardChoices.map((hc) => (
                     <div key={hc.id} style={{ padding: '1rem', background: 'hsl(var(--bg-app))', borderRadius: '8px', borderLeft: '2px solid var(--text-muted)' }}>
                         <div style={{ fontWeight: 'bold', color: 'hsl(var(--text-main))' }}>{hc.description}</div>
                         <div style={{ color: 'hsl(var(--text-muted))', fontSize: '0.9rem' }}>{hc.reasoning}</div>
@@ -74,7 +93,7 @@ export default function EmergentClient({ hardChoices, strategicConversations }) 
             </form>
 
             <div style={{ display: 'grid', gap: '1rem' }}>
-                {strategicConversations.map((sc: any) => (
+                {strategicConversations.map((sc) => (
                     <div key={sc.id} style={{ padding: '1rem', background: 'hsl(var(--bg-app))', borderRadius: '8px', borderLeft: `2px solid ${accentColor}` }}>
                         <div style={{ fontWeight: 'bold', color: 'hsl(var(--text-main))' }}>{sc.topic}</div>
                         <div style={{ color: 'hsl(var(--text-muted))', fontSize: '0.9rem' }}>{sc.conclusion}</div>

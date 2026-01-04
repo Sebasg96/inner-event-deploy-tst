@@ -59,7 +59,8 @@ export default async function PlanningPage() {
     });
 
     const areaPurpose = await prisma.purpose.findFirst({
-        where: { tenantId, type: 'AREA' }
+        where: { tenantId, type: 'AREA' },
+        include: { megas: true }
     });
 
     const analysisData = {

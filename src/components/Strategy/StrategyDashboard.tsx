@@ -9,10 +9,50 @@ import NavBar from '../NavBar';
 import { useModuleTheme } from '@/lib/hooks/useModuleTheme';
 import EditableText from '@/components/EditableText';
 
+// Define flexible interfaces for the nested strategy data
+interface Initiative {
+    id: string;
+    title: string;
+    progress: number;
+    status: string;
+}
+
+interface KeyResult {
+    id: string;
+    statement: string;
+    initiatives: Initiative[];
+    targetValue: number;
+    metricUnit: string;
+}
+
+interface Objective {
+    id: string;
+    statement: string;
+    keyResults: KeyResult[];
+}
+
+interface Mega {
+    id: string;
+    statement: string;
+    deadline: string | Date;
+    objectives: Objective[];
+}
+
+interface Purpose {
+    id: string;
+    statement: string;
+    megas: Mega[];
+}
+
+interface AreaPurpose {
+    id: string;
+    statement: string;
+}
+
 type StrategyDashboardProps = {
-    purpose: any;
-    areaPurpose?: any;
-    analysisData?: any;
+    purpose: Purpose | null;
+    areaPurpose?: AreaPurpose | null;
+    analysisData?: Record<string, any>; // Keeping loose for analysis blob
 };
 
 export default function StrategyDashboard({ purpose, areaPurpose, analysisData }: StrategyDashboardProps) {
@@ -94,7 +134,7 @@ export default function StrategyDashboard({ purpose, areaPurpose, analysisData }
                     </div>
 
                     <div className={styles.megaGrid}>
-                        {purpose.megas.map((mega: any) => (
+                        {purpose.megas.map((mega) => (
                             <div key={mega.id} className={styles.megaCard} style={{ borderLeft: `4px solid ${theme.color}` }}>
                                 <div className={styles.megaHeader}>
                                     <h3 className={styles.megaTitle}>
@@ -117,7 +157,7 @@ export default function StrategyDashboard({ purpose, areaPurpose, analysisData }
                                         </form>
                                     </div>
 
-                                    {mega.objectives.map((obj: any) => (
+                                    {mega.objectives.map((obj) => (
                                         <div key={obj.id} className={styles.objectiveItem}>
                                             <div className={styles.objectiveTitle}>
                                                 <EditableText
@@ -128,7 +168,7 @@ export default function StrategyDashboard({ purpose, areaPurpose, analysisData }
 
                                             {/* Key Results */}
                                             <div className={styles.krList}>
-                                                {obj.keyResults.map((kr: any) => (
+                                                {obj.keyResults.map((kr) => (
                                                     <div key={kr.id} className={styles.krItem} style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '0.5rem' }}>
                                                         <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                             <div style={{ flex: 1, color: 'hsl(var(--text-main))' }}> {/* Force dark text context */}
@@ -155,13 +195,13 @@ export default function StrategyDashboard({ purpose, areaPurpose, analysisData }
                                                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
                                                                         <span>{kr.initiatives.length} Initiatives</span>
                                                                         <span>
-                                                                            {Math.round(kr.initiatives.reduce((acc: number, curr: any) => acc + (curr.progress || 0), 0) / kr.initiatives.length)}% Avg.
+                                                                            {Math.round(kr.initiatives.reduce((acc: number, curr) => acc + (curr.progress || 0), 0) / kr.initiatives.length)}% Avg.
                                                                         </span>
                                                                     </div>
                                                                     <div style={{ height: '4px', background: 'hsl(var(--bg-surface))', borderRadius: '2px', overflow: 'hidden' }}>
                                                                         <div style={{
                                                                             height: '100%',
-                                                                            width: `${Math.round(kr.initiatives.reduce((acc: number, curr: any) => acc + (curr.progress || 0), 0) / kr.initiatives.length)}%`,
+                                                                            width: `${Math.round(kr.initiatives.reduce((acc: number, curr) => acc + (curr.progress || 0), 0) / kr.initiatives.length)}%`,
                                                                             background: 'var(--primary)',
                                                                             transition: 'width 0.5s ease'
                                                                         }} />

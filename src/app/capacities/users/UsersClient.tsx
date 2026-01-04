@@ -8,7 +8,19 @@ import EditUserModal from './EditUserModal';
 import MyTeamModal from './MyTeamModal';
 
 // Enhanced User Type
-type User = {
+// Define Interfaces
+interface Team {
+    id: string;
+    name: string;
+    leaderId: string;
+    members: {
+        id: string;
+        userId: string;
+        user: User;
+    }[];
+}
+
+interface User {
     id: string;
     name: string;
     email: string;
@@ -16,14 +28,14 @@ type User = {
         color: string;
     } | null;
     jobRole?: string; // TEAM_LEAD, MEMBER
-    ledTeams?: any[];
-    teams?: any[]; // Teams they are member of
-};
+    ledTeams?: Team[];
+    teams?: { team: Team }[]; // Many-to-many relation typically returns array of join objects
+}
 
-export default function UsersClient({ users, createUserAction }: { users: User[], createUserAction: any }) {
+export default function UsersClient({ users, createUserAction }: { users: User[], createUserAction: (formData: FormData) => Promise<void> }) {
     const { dict } = useLanguage();
     const [editingUser, setEditingUser] = useState<User | null>(null);
-    const [viewingTeam, setViewingTeam] = useState<{ user: User, team: any } | null>(null);
+    const [viewingTeam, setViewingTeam] = useState<{ user: User, team: Team } | null>(null);
 
     return (
         <div className={styles.container}>
@@ -99,7 +111,7 @@ export default function UsersClient({ users, createUserAction }: { users: User[]
                                     style={{ fontSize: '0.8rem', width: '100%', marginTop: '0.5rem' }}
                                     onClick={() => setViewingTeam({
                                         user,
-                                        team: user.ledTeams && user.ledTeams.length > 0 ? user.ledTeams[0] : null
+                                        team: user.ledTeams && user.ledTeams.length > 0 ? user.ledTeams[0] : { id: 'pending', name: 'Sin Equipo', leaderId: user.id, members: [] }
                                     })}
                                 >
                                     Gestionar Mi Equipo

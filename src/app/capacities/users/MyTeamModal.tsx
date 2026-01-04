@@ -4,9 +4,30 @@
 import React, { useState } from 'react';
 import { addTeamMember, removeTeamMember } from '@/app/actions';
 
+interface ProjectTeamMember {
+    id: string;
+    userId: string;
+    user: {
+        name: string;
+        email?: string;
+    };
+}
+
+interface ProjectTeam {
+    id: string;
+    name: string;
+    leader?: {
+        name: string;
+        email?: string;
+    };
+    members: ProjectTeamMember[];
+}
+
 type Props = {
-    user: any; // The current user viewing (Leader or Member)
-    team: any; // The team data (including members and leader)
+    user: {
+        jobRole?: string;
+    };
+    team: ProjectTeam;
     onClose: () => void;
 };
 
@@ -53,7 +74,7 @@ export default function MyTeamModal({ user, team, onClose }: Props) {
                     <h3 style={{ fontSize: '1rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Miembros del Equipo ({team.members.length})</h3>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        {team.members.map((m: any) => (
+                        {team.members.map((m) => (
                             <div key={m.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem', borderBottom: '1px solid var(--border-glass)' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                     <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'var(--accent)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>

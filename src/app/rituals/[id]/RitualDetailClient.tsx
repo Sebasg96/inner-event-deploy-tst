@@ -7,7 +7,23 @@ import NavBar from '@/components/NavBar';
 import { updateRitual } from '@/app/actions';
 import EditableText from '@/components/EditableText';
 
-export default function RitualDetailClient({ ritual, okrSummary }) {
+interface Ritual {
+    id: string;
+    name: string;
+    date: Date | string;
+    description: string | null;
+    discussionPoints: string | null;
+    commitments: string | null;
+    aiSuggestions: string | null;
+    participants: { id: string; user: { name: string; email: string; } }[];
+}
+
+interface Props {
+    ritual: Ritual;
+    okrSummary: any; // Keeping as any for now as summary structure varies or is loosely defined JSON, unless known.
+}
+
+export default function RitualDetailClient({ ritual, okrSummary }: Props) {
     const [isThinking, setIsThinking] = useState(false);
     const [aiAdvice, setAiAdvice] = useState(ritual.aiSuggestions || null);
 
@@ -18,9 +34,9 @@ export default function RitualDetailClient({ ritual, okrSummary }) {
             // In a real scenario, we'd pass the OKR summary to the LLM
             const res = await fetch('/api/ai/refine-text', {
                 method: 'POST',
-                body: JSON.stringify({ 
-                    text: `Contexto: ${ritual.description}. Participantes: ${ritual.participants.length}. OKRs: ${JSON.stringify(okrSummary)}`, 
-                    type: 'ritual_consultant' 
+                body: JSON.stringify({
+                    text: `Contexto: ${ritual.description}. Participantes: ${ritual.participants.length}. OKRs: ${JSON.stringify(okrSummary)}`,
+                    type: 'ritual_consultant'
                 })
             });
             const data = await res.json();
@@ -42,11 +58,11 @@ export default function RitualDetailClient({ ritual, okrSummary }) {
                         color: 'hsl(var(--accent))',
                         marginBottom: 0
                     }}>{ritual.name}</h1>
-                    <span style={{ 
-                        fontSize: '1rem', 
-                        padding: '0.25rem 0.75rem', 
-                        background: 'hsl(var(--bg-app))', 
-                        color: 'white', 
+                    <span style={{
+                        fontSize: '1rem',
+                        padding: '0.25rem 0.75rem',
+                        background: 'hsl(var(--bg-app))',
+                        color: 'white',
                         borderRadius: '12px',
                         border: '1px solid hsl(var(--border-glass))'
                     }}>
@@ -57,16 +73,16 @@ export default function RitualDetailClient({ ritual, okrSummary }) {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
-                
+
                 {/* Main Content: Discussion & Commitments */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                    
+
                     {/* Discussion Points */}
                     <section className="glass-panel" style={{ padding: '2rem' }}>
                         <h2 style={{ color: 'hsl(var(--text-main))', marginBottom: '1rem', borderBottom: '2px solid hsl(var(--accent))', paddingBottom: '0.5rem' }}>
                             🗣️ Puntos Tratados
                         </h2>
-                        <EditableText 
+                        <EditableText
                             initialValue={ritual.discussionPoints || ''}
                             onSave={async (val) => {
                                 const formData = new FormData();
@@ -87,7 +103,7 @@ export default function RitualDetailClient({ ritual, okrSummary }) {
                         <h2 style={{ color: 'hsl(var(--text-main))', marginBottom: '1rem', borderBottom: '2px solid hsl(var(--success))', paddingBottom: '0.5rem' }}>
                             🤝 Compromisos
                         </h2>
-                        <EditableText 
+                        <EditableText
                             initialValue={ritual.commitments || ''}
                             onSave={async (val) => {
                                 const formData = new FormData();
@@ -105,24 +121,24 @@ export default function RitualDetailClient({ ritual, okrSummary }) {
 
                 {/* Sidebar: AI & Context */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                    
+
                     {/* AI Consultant */}
-                    <section className="glass-panel" style={{ 
-                        padding: '1.5rem', 
+                    <section className="glass-panel" style={{
+                        padding: '1.5rem',
                         background: 'linear-gradient(145deg, hsl(var(--bg-surface)), #f0fdf4)', // Subtle upgrade
                         border: '1px solid hsl(var(--primary))'
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                             <h3 style={{ color: 'hsl(var(--primary))', margin: 0 }}>🤖 Consultor IA</h3>
-                            <button 
+                            <button
                                 onClick={handleConsultAI}
                                 disabled={isThinking}
-                                style={{ 
-                                    background: 'hsl(var(--primary))', 
-                                    color: 'white', 
-                                    border: 'none', 
-                                    borderRadius: '20px', 
-                                    padding: '0.25rem 0.75rem', 
+                                style={{
+                                    background: 'hsl(var(--primary))',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '20px',
+                                    padding: '0.25rem 0.75rem',
                                     cursor: 'pointer',
                                     fontSize: '0.8rem'
                                 }}
@@ -130,12 +146,12 @@ export default function RitualDetailClient({ ritual, okrSummary }) {
                                 {isThinking ? 'Analizando...' : 'Analizar OKRs'}
                             </button>
                         </div>
-                        
+
                         {aiAdvice ? (
-                            <div style={{ 
-                                fontSize: '0.95rem', 
-                                color: 'hsl(var(--text-main))', 
-                                lineHeight: '1.6', 
+                            <div style={{
+                                fontSize: '0.95rem',
+                                color: 'hsl(var(--text-main))',
+                                lineHeight: '1.6',
                                 fontStyle: 'italic',
                                 whiteSpace: 'pre-wrap'
                             }}>
@@ -160,8 +176,8 @@ export default function RitualDetailClient({ ritual, okrSummary }) {
                         ) : (
                             <p style={{ color: 'hsl(var(--text-muted))', fontSize: '0.9rem' }}>Sin participantes registrados.</p>
                         )}
-                         {/* Placeholder for Add Participant */}
-                         <button className="btn-secondary" style={{ marginTop: '1rem', width: '100%', fontSize: '0.8rem', padding: '0.5rem' }}>
+                        {/* Placeholder for Add Participant */}
+                        <button className="btn-secondary" style={{ marginTop: '1rem', width: '100%', fontSize: '0.8rem', padding: '0.5rem' }}>
                             + Gestionar Participantes
                         </button>
                     </section>

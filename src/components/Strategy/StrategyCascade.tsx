@@ -3,7 +3,39 @@
 import React from 'react';
 import styles from './StrategyCascade.module.css';
 
-export default function StrategyCascade({ purpose }) {
+// Define types
+interface Initiative {
+    id: string;
+    progress: number;
+}
+
+interface KeyResult {
+    id: string;
+    statement: string;
+    initiatives?: Initiative[];
+}
+
+interface Objective {
+    id: string;
+    statement: string;
+    keyResults: KeyResult[];
+    childObjectives?: Objective[];
+    owner?: { name: string };
+}
+
+interface Mega {
+    objectives: Objective[];
+}
+
+interface Purpose {
+    megas: Mega[];
+}
+
+interface Props {
+    purpose: Purpose | null;
+}
+
+export default function StrategyCascade({ purpose }: Props) {
     if (!purpose || !purpose.megas[0]) return <div>No strategic data found.</div>;
 
     const mega = purpose.megas[0];
@@ -16,7 +48,7 @@ export default function StrategyCascade({ purpose }) {
     let totalProgress = 0;
     let countForProgress = 0;
 
-    const traverse = (objs) => {
+    const traverse = (objs: Objective[]) => {
         objs.forEach(obj => {
             totalObjectives++;
             obj.keyResults.forEach(kr => {
@@ -34,7 +66,7 @@ export default function StrategyCascade({ purpose }) {
 
     const globalProgress = countForProgress > 0 ? Math.round(totalProgress / countForProgress) : 0;
 
-    const ObjectiveNode = ({ obj, level }) => {
+    const ObjectiveNode = ({ obj, level }: { obj: Objective; level: number }) => {
         const [isExpanded, setIsExpanded] = React.useState(false); // Default collapsed
         const hasChildren = obj.childObjectives && obj.childObjectives.length > 0;
 

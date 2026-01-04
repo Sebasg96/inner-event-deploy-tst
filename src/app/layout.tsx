@@ -4,6 +4,7 @@ import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import { AuthProvider } from "@/lib/auth/AuthContext";
 import TenantTheme from "@/components/TenantTheme";
+import PragmaIA from "@/components/PragmaIA/PragmaIA";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -18,11 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={outfit.className}>
         <LanguageProvider>
           <AuthProvider>
             <TenantTheme />
+            <PragmaIA />
             {children}
           </AuthProvider>
         </LanguageProvider>

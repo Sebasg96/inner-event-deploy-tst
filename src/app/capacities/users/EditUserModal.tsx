@@ -5,7 +5,12 @@ import React, { useState } from 'react';
 import { updateUser } from '@/app/actions';
 
 type Props = {
-    user: any;
+    user: {
+        id: string;
+        name: string;
+        email: string;
+        jobRole?: string;
+    };
     onClose: () => void;
 };
 

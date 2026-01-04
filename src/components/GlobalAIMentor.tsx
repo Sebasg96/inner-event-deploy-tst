@@ -4,7 +4,14 @@ import React, { useState } from 'react';
 import PrismaAvatar from './PrismaAvatar';
 import { useModuleTheme } from '@/lib/hooks/useModuleTheme';
 
-export default function GlobalAIMentor({ user }: { user?: any }) {
+import { User } from '@prisma/client';
+
+interface SimpleUser {
+    name: string;
+    email?: string;
+}
+
+export default function GlobalAIMentor({ user }: { user?: SimpleUser | null }) {
     const [isOpen, setIsOpen] = useState(false);
     const theme = useModuleTheme();
 
@@ -65,7 +72,7 @@ export default function GlobalAIMentor({ user }: { user?: any }) {
                     background: 'hsl(var(--bg-app))',
                     boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
                 }}>
-                    <PrismaAvatar size={60} emotion={isOpen ? 'happy' : 'neutral'} />
+                    <PrismaAvatar size={60} emotion={isOpen ? 'happy' : undefined} />
                 </div>
 
                 {!isOpen && (

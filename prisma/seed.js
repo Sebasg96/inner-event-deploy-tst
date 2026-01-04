@@ -95,7 +95,7 @@ async function main() {
       }
     });
 
-    await prisma.mega.create({
+    const mega = await prisma.mega.create({
       data: {
         statement: `Reach 1M Customers by 2030`,
         deadline: new Date('2030-12-31'),
@@ -103,6 +103,66 @@ async function main() {
         tenantId: tenant.id
       }
     });
+
+    // Create Objectives
+    const objs = [
+      `Expand ${name} Market Share`,
+      `Improve Customer Satisfaction`,
+      `Launch New Innovation Product`
+    ];
+
+    for (const objStmt of objs) {
+      const objective = await prisma.objective.create({
+        data: {
+          statement: objStmt,
+          megaId: mega.id,
+          tenantId: tenant.id
+        }
+      });
+
+      // Create Key Results
+      for (let k = 1; k <= 3; k++) {
+        const kr = await prisma.keyResult.create({
+          data: {
+            statement: `Increase Metric ${k} for ${objStmt.split(' ')[0]}`,
+            targetValue: 100 * k,
+            metricUnit: '%',
+            objectiveId: objective.id,
+            tenantId: tenant.id
+          }
+        });
+
+        // Create Initiatives
+        const initiative = await prisma.initiative.create({
+          data: {
+            title: `Initiative for KR ${k}`,
+            keyResultId: kr.id,
+            tenantId: tenant.id,
+            horizon: 'H1',
+            status: 'IN_PROGRESS',
+            progress: 30
+          }
+        });
+
+        // Create Kanban Tasks
+        await prisma.kanbanTask.create({
+          data: {
+            title: `Task 1 for ${initiative.title}`,
+            initiativeId: initiative.id,
+            tenantId: tenant.id,
+            status: 'DONE'
+          }
+        });
+        await prisma.kanbanTask.create({
+          data: {
+            title: `Task 2 for ${initiative.title}`,
+            initiativeId: initiative.id,
+            tenantId: tenant.id,
+            status: 'TODO'
+          }
+        });
+      }
+    }
   }
 
   // 2. Create Compensar

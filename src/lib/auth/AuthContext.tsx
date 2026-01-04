@@ -10,7 +10,7 @@ interface User {
     role: string;
     tenantId: string;
     tenantName: string;
-    tenantLogo?: string;
+    tenantLogo?: string | null;
 }
 
 interface AuthContextType {

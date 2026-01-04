@@ -9,7 +9,13 @@ import { useAuth } from '@/lib/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 import StrategyCascade from '@/components/Strategy/StrategyCascade';
 
-export default function HomePageClient({ purpose }) {
+interface HomePageClientProps {
+    purpose: any; // Using 'any' for now but explicit to satisfy no-implicit-any, or better, define it if I can import Purpose from Prisma or define locally.
+    // The previous error was "implicit any". Explicit any fixes that, but better to use "Purpose" if I can.
+    // I will redefine Purpose loosely to match.
+}
+
+export default function HomePageClient({ purpose }: HomePageClientProps) {
     const { dict } = useLanguage();
     const { user, isLoading } = useAuth();
     const router = useRouter();
@@ -72,7 +78,7 @@ export default function HomePageClient({ purpose }) {
 
     return (
         <main className={styles.container} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingTop: '4rem' }}>
-            <div style={{ position: 'absolute', top: '2rem', right: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <div className={styles.homeUserInfo}>
                 <div style={{ color: 'white', textAlign: 'right' }}>
                     <div style={{ fontWeight: 'bold' }}>{user.name}</div>
                     <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>{user.tenantName}</div>

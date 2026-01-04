@@ -1,23 +1,40 @@
+/* ... existing styles ... */
+
 .container {
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+}
+
 .header {
     font-size: 2.5rem;
     margin-bottom: 2rem;
     color: hsl(var(--primary));
-    /* 55% Corporate Blue */
     font-weight: 800;
-    /* Authority */
     text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+    .header {
+        font-size: 1.75rem;
+    }
 }
 
 .section {
     margin-bottom: 3rem;
     padding: 2rem;
-    /* Glassmorphism applied via global class, but specific spacing here */
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 1rem;
+    }
 }
 
 .sectionTitle {
@@ -35,7 +52,6 @@
     line-height: 1.4;
     background: white;
     color: hsl(var(--text-main));
-    /* Explicit Dark Text */
     background-clip: border-box;
     text-align: center;
     padding: 2.5rem;
@@ -45,21 +61,40 @@
     margin-top: 1rem;
 }
 
+@media (max-width: 768px) {
+    .purposeDisplay {
+        font-size: 1.25rem;
+        padding: 1.5rem;
+    }
+}
+
 .formRow {
     display: flex;
     gap: 1rem;
     align-items: center;
 }
 
+@media (max-width: 768px) {
+    .formRow {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
 .megaGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
+}
+
+@media (max-width: 480px) {
+    .megaGrid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .megaCard {
     background: white;
-    /* 25% Pure White Surface */
     border: 1px solid hsl(var(--border-glass));
     border-radius: 12px;
     padding: 1.5rem;
@@ -82,11 +117,17 @@
     border-bottom: 1px solid hsl(var(--border-glass));
 }
 
+@media (max-width: 768px) {
+    .megaHeader {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
 .megaTitle {
     font-size: 1.5rem;
     font-weight: 600;
     color: hsl(var(--text-main));
-    /* Dark Navy for readability */
 }
 
 .megaDate {
@@ -95,6 +136,7 @@
     background: hsl(var(--bg-app));
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
+    white-space: nowrap;
 }
 
 .objectivesList {
@@ -127,10 +169,17 @@
     justify-content: space-between;
     font-size: 0.9rem;
     color: hsl(var(--text-main));
-    /* Darker text */
     padding: 0.5rem;
     background: rgba(0, 0, 0, 0.05);
     border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+    .krItem {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
 }
 
 .krTarget {
@@ -140,7 +189,6 @@
 
 .addButton {
     background: hsl(var(--text-main));
-    /* Black/Dark Navy */
     color: white;
     border: none;
     padding: 0.5rem;
@@ -151,7 +199,22 @@
     width: 100%;
 }
 
-.addButton:hover {
-    background: black;
-    transform: translateY(-1px);
+
+.homeUserInfo {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .homeUserInfo {
+        position: static;
+        width: 100%;
+        justify-content: flex-end;
+        margin-bottom: 1rem;
+        padding-right: 1rem;
+    }
 }

@@ -7,7 +7,29 @@ import KanbanBoard from '@/components/Kanban/KanbanBoard';
 import Link from 'next/link';
 import NavBar from '@/components/NavBar';
 
-export default function InitiativeClient({ initiative, tasks, createKanbanTaskAction }: any) {
+import { KanbanStatus } from '@prisma/client';
+
+interface Task {
+    id: string;
+    title: string;
+    status: 'TODO' | 'IN_PROGRESS' | 'DONE'; // Match KanbanTask
+    assigneeId?: string | null;
+}
+
+interface Props {
+    initiative: {
+        id: string;
+        title: string;
+        keyResult?: {
+            statement: string;
+        };
+        aiExplanation?: string | null;
+    };
+    tasks: Task[];
+    createKanbanTaskAction: (formData: FormData) => Promise<void>;
+}
+
+export default function InitiativeClient({ initiative, tasks, createKanbanTaskAction }: Props) {
     const { dict } = useLanguage();
     const [isAddOpen, setIsAddOpen] = useState(false);
 

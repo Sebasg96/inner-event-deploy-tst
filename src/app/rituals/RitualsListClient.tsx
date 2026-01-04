@@ -6,7 +6,18 @@ import styles from '@/app/strategy/page.module.css';
 import NavBar from '@/components/NavBar';
 import { createRitual } from '@/app/actions';
 
-export default function RitualsPage({ rituals }) {
+interface Ritual {
+    id: string;
+    name: string;
+    date: Date | string;
+    description: string | null;
+}
+
+interface Props {
+    rituals: Ritual[];
+}
+
+export default function RitualsPage({ rituals }: Props) {
     const [isCreating, setIsCreating] = useState(false);
 
     return (
@@ -51,7 +62,7 @@ export default function RitualsPage({ rituals }) {
                 </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
                 {rituals.length === 0 && (
                     <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '4rem', color: 'hsl(var(--text-muted))' }}>
                         No hay rituales registrados aún. Comienza programando uno.

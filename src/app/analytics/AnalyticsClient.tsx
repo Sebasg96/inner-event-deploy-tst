@@ -7,12 +7,19 @@ import NavBar from '@/components/NavBar';
 import { useModuleTheme } from '@/lib/hooks/useModuleTheme';
 import PrismaAvatar from '@/components/PrismaAvatar';
 
+// Define types
+interface InitiativeItem {
+    id: string;
+    title: string;
+    progress?: number;
+}
+
 type Props = {
     data: {
-        completedInitiatives: any[];
-        stalledInitiatives: any[];
-        atRiskInitiatives: any[];
-        recentWins: any[];
+        completedInitiatives: InitiativeItem[];
+        stalledInitiatives: InitiativeItem[];
+        atRiskInitiatives: InitiativeItem[];
+        recentWins: InitiativeItem[];
         totalInitiatives: number;
     }
 };
@@ -62,7 +69,7 @@ export default function AnalyticsClient({ data }: Props) {
                     color="var(--success)"
                     items={data.completedInitiatives}
                     emptyMsg="Aún estamos trabajando en las primeras victorias. ¡Ánimo!"
-                    renderItem={(item: any) => (
+                    renderItem={(item) => (
                         <span key={item.id}>Completamos la iniciativa <strong>{item.title}</strong> al 100%.</span>
                     )}
                 />
@@ -74,7 +81,7 @@ export default function AnalyticsClient({ data }: Props) {
                     color="var(--accent)"
                     items={data.stalledInitiatives}
                     emptyMsg="Todo fluye muy bien. No detecto bloqueos mayores por ahora."
-                    renderItem={(item: any) => (
+                    renderItem={(item) => (
                         <span key={item.id}>La iniciativa <strong>{item.title}</strong> parece estancada. Quizás la estrategia necesita un ajuste.</span>
                     )}
                 />
@@ -86,7 +93,7 @@ export default function AnalyticsClient({ data }: Props) {
                     color="var(--warning)"
                     items={data.atRiskInitiatives}
                     emptyMsg="¡Excelente! No veo riesgos inminentes en el horizonte."
-                    renderItem={(item: any) => (
+                    renderItem={(item) => (
                         <span key={item.id}>Atención con <strong>{item.title}</strong>, su progreso es bajo para el tiempo transcurrido.</span>
                     )}
                 />
@@ -98,7 +105,7 @@ export default function AnalyticsClient({ data }: Props) {
                     color="#FFD700" // Gold
                     items={data.recentWins} // Could be same as completed or high impact
                     emptyMsg="Pronto tendremos grandes hitos para celebrar."
-                    renderItem={(item: any) => (
+                    renderItem={(item) => (
                         <span key={item.id}>¡Celebramos el avance del <strong>{item.progress}%</strong> en <strong>{item.title}</strong>!</span>
                     )}
                 />
@@ -130,7 +137,16 @@ export default function AnalyticsClient({ data }: Props) {
     );
 }
 
-function StoryCard({ title, icon, color, items, renderItem, emptyMsg }: any) {
+interface StoryCardProps {
+    title: string;
+    icon: string;
+    color: string;
+    items: InitiativeItem[];
+    renderItem: (item: InitiativeItem) => React.ReactNode;
+    emptyMsg: string;
+}
+
+function StoryCard({ title, icon, color, items, renderItem, emptyMsg }: StoryCardProps) {
     return (
         <div className="glass-panel" style={{ padding: '1.5rem', borderTop: `4px solid ${color}`, height: '100%', display: 'flex', flexDirection: 'column' }}>
             <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)' }}>
@@ -140,7 +156,7 @@ function StoryCard({ title, icon, color, items, renderItem, emptyMsg }: any) {
                 {items.length === 0 ? (
                     <p style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>{emptyMsg}</p>
                 ) : (
-                    items.slice(0, 3).map((item: any) => (
+                    items.slice(0, 3).map((item) => (
                         <div key={item.id} style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.5)', borderRadius: '8px', borderLeft: `3px solid ${color}`, fontSize: '0.95rem' }}>
                             {renderItem(item)}
                         </div>

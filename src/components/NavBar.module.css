@@ -1,0 +1,143 @@
+.navContainer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.desktopLangSwitch {
+    display: block;
+}
+
+.mobileMenuBtn {
+    display: flex;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001;
+    align-items: center;
+    justify-content: center;
+    color: hsl(var(--text-main));
+}
+
+.hamburgerIcon {
+    width: 24px;
+    height: 2px;
+    background-color: hsl(var(--text-main));
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.hamburgerIcon::before,
+.hamburgerIcon::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background-color: hsl(var(--text-main));
+    transition: all 0.3s ease;
+}
+
+.hamburgerIcon::before {
+    top: -8px;
+}
+
+.hamburgerIcon::after {
+    top: 8px;
+}
+
+/* Open state */
+.open .hamburgerIcon {
+    background-color: transparent;
+}
+
+.open .hamburgerIcon::before {
+    top: 0;
+    transform: rotate(45deg);
+}
+
+.open .hamburgerIcon::after {
+    top: 0;
+    transform: rotate(-45deg);
+}
+
+.mobileOverlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: auto;
+    width: 25vw;
+    min-width: 300px;
+    height: 100vh;
+    background: hsl(var(--bg-app) / 0.98);
+    backdrop-filter: blur(12px);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 2rem;
+    gap: 1.5rem;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+    border-left: 1px solid hsl(var(--border-glass));
+}
+
+.mobileOverlay.open {
+    transform: translateX(0);
+}
+
+.closeBtn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: hsl(var(--text-muted));
+    font-size: 2rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+    color: hsl(var(--text-main));
+    background: hsl(var(--surface-active));
+}
+
+.mobileLink {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: hsl(var(--text-body));
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid hsl(var(--border-glass));
+    border-radius: 8px;
+    transition: background 0.2s ease;
+    max-width: none;
+}
+
+.mobileLink:hover {
+    background: hsl(var(--primary) / 0.1);
+    padding-left: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .mobileOverlay {
+        width: 80vw;
+        min-width: 250px;
+    }
+
+    .desktopLangSwitch {
+        display: none;
+    }
+}

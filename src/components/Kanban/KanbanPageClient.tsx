@@ -13,8 +13,31 @@ import { useLanguage } from '@/lib/i18n/LanguageContext';
 import Link from 'next/link';
 
 
+// Define types
+interface TeamMember {
+    user: {
+        name: string;
+        discProfile?: {
+            color: string;
+        } | null;
+    };
+}
+
+interface Team {
+    members: TeamMember[];
+}
+
+interface Initiative {
+    id: string;
+    title: string;
+    status: string;
+    horizon: string;
+    progress?: number;
+    team?: Team | null;
+}
+
 type Props = {
-    initiatives: any[];
+    initiatives: Initiative[];
 };
 
 export default function KanbanPageClient({ initiatives }: Props) {
@@ -29,7 +52,7 @@ export default function KanbanPageClient({ initiatives }: Props) {
                 <NavBar />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
                 {initiatives.map((initiative) => (
                     <Link
                         href={`/strategy/initiative/${initiative.id}`}
@@ -57,7 +80,7 @@ export default function KanbanPageClient({ initiatives }: Props) {
                                 <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                     <span style={{ fontSize: '0.7rem', opacity: 0.6 }}>Team:</span>
                                     <div style={{ display: 'flex', marginLeft: '0.5rem' }}>
-                                        {initiative.team.members.map((m: any, idx: number) => (
+                                        {initiative.team.members.map((m: TeamMember, idx: number) => (
                                             <div
                                                 key={idx}
                                                 style={{
